@@ -46,6 +46,7 @@ def populate(in_file):
 		features = line.split(",")
 		for featureid, feature in enumerate(features):
 			feature = feature.strip()
+
 			#---Populate training_data[][]---
 			if sampleid < 40:									#training[0-39]: iris-setosa
 				training_data[sampleid][featureid] = feature
@@ -53,6 +54,7 @@ def populate(in_file):
 				training_data[sampleid-10][featureid] = feature
 			elif sampleid >= 100 and sampleid < 140:			#training[80-119]: iris-virginica
 			 	training_data[sampleid-20][featureid] = feature
+
 			#---Populate test_data[][]---
 			elif sampleid >= 40 and sampleid < 50:				#test[0-9]: iris-setosa
 				test_data[sampleid-40][featureid] = feature
@@ -62,9 +64,12 @@ def populate(in_file):
 				test_data[sampleid-120][featureid] = feature
 			else:
 				break
-#################################################################
-# "main"
+#-----------------------------------------------------------------
 #
+#
+######################### main #################################
+
+
 
 if len(sys.argv) != 3:
 	print("Usage: qda_classifier.py dataset.txt out_file")
