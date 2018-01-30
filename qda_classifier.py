@@ -26,9 +26,13 @@ training_cols = 5        #five traits
 training_rows = 120      #80% of one class for classification (40 of 50), 3 classes
 test_cols = 5
 test_rows = 30          #20% of one class (10 of 50), 3 classes
-training_data = [[None for x in range(training_cols)] for y in range(training_rows)]
-test_data = [[None for x in range(test_cols)] for y in range(test_rows)]
+source_training_data = [[None for x in range(training_cols)] for y in range(training_rows)]
+source_test_data = [[None for x in range(test_cols)] for y in range(test_rows)]
 line_index = 0
+training_data = np.asarray(source_training_data)
+test_data = np.asarray(source_test_data)
+#training_data = np.zeros((training_rows, training_cols))
+#test_data = np.zeros((test_rows, test_cols))
 #---For debugging---
 testing = True
 
@@ -42,6 +46,8 @@ testing = True
 #		2) Take remaining 10 entries of that class and place in test_data
 #
 def populate(in_file):
+	global training_data
+	global test_data
 	for sampleid, line in enumerate(in_file):		#Row: one flower's features
 		features = line.split(",")
 		for featureid, feature in enumerate(features):
@@ -49,24 +55,44 @@ def populate(in_file):
 
 			#---Populate training_data[][]---
 			if sampleid < 40:									#training[0-39]: iris-setosa
-				training_data[sampleid][featureid] = feature
+				source_training_data[sampleid][featureid] = feature
 			elif sampleid >= 50 and sampleid < 90:				#training[40-79]: iris-versicolor
-				training_data[sampleid-10][featureid] = feature
+				source_training_data[sampleid-10][featureid] = feature
 			elif sampleid >= 100 and sampleid < 140:			#training[80-119]: iris-virginica
-			 	training_data[sampleid-20][featureid] = feature
+			 	source_training_data[sampleid-20][featureid] = feature
 
 			#---Populate test_data[][]---
 			elif sampleid >= 40 and sampleid < 50:				#test[0-9]: iris-setosa
-				test_data[sampleid-40][featureid] = feature
+				source_test_data[sampleid-40][featureid] = feature
 			elif sampleid >= 90 and sampleid < 100:				#test[10-19]: iris-versicolor
-				test_data[sampleid-80][featureid] = feature
+				source_test_data[sampleid-80][featureid] = feature
 			elif sampleid >= 140:								#test[20-29]: iris-virginica
-				test_data[sampleid-120][featureid] = feature
+				source_test_data[sampleid-120][featureid] = feature
 			else:
 				break
+
+
+	training_data = np.asarray(source_training_data)
+	test_data = np.asarray(source_test_data)
+	training_data = np.delete(training_data, 4, 1)
+	test_data = np.delete(test_data, 4, 1)
+#	if testing: print(training_data)
+#	if testing: print(test_data)
+#	training_data = np.array(source_training_data)
+#	test_data = np.array(source_test_data)
+
 #-----------------------------------------------------------------
+# Helpers
 #
+
+
+
+#-----------------------------------------------------------------
+# mu derivation
 #
+
+
+
 ######################### main #################################
 
 
@@ -86,3 +112,5 @@ print("Done")
 
 if testing: print(training_data)
 if testing: print(test_data)
+#if testing: print(source_training_data)
+#if testing: print(source_test_data)
