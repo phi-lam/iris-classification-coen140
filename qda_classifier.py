@@ -72,10 +72,14 @@ def populate(in_file):
 				break
 
 
+	#---Convert training data and test data to numpy arrays, remove string category---
 	training_data = np.asarray(source_training_data)
 	test_data = np.asarray(source_test_data)
 	training_data = np.delete(training_data, 4, 1)
 	test_data = np.delete(test_data, 4, 1)
+	training_data = training_data.astype(float)
+	test_data = test_data.astype(float)
+	
 #	if testing: print(training_data)
 #	if testing: print(test_data)
 #	training_data = np.array(source_training_data)
