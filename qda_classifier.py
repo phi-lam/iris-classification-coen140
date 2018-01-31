@@ -2,13 +2,13 @@
 #COEN 140 HOMEWORK 2
 #qda_classifier.py
 
-#################### IMPORTS #####################
+################################# IMPORTS ###################################
 import numpy as np
 import math
 import sys
 from operator import itemgetter
 
-#################### VARIABLE DECLARATIONS ####################
+########################## VARIABLE DECLARATIONS ###########################
 #   Elements:
 #       1. sepal length in cm
 #       2. sepal width in cm
@@ -36,7 +36,20 @@ test_data = np.asarray(source_test_data)
 #---For debugging---
 testing = True
 
-#################### FUNCTION DEFINITIONS #####################
+########################## FUNCTION DEFINITIONS #############################
+
+#-----------------------------------------------------------------
+# FUNCTION: calculate_mu()
+# 	Description: Simply calls np.mean to calculate the mean of each
+#				feature (calculates by column)
+# 	Notes:	p = 4; mu is 1x4 matrix
+def calculate_mu(np_array):
+	mu_vector = np.mean(np_array, axis = 0)
+	return mu_vector
+
+#-----------------------------------------------------------------
+# FUNCTION: calculate_covariance()
+
 
 #-----------------------------------------------------------------
 # FUNCTION: populate()
@@ -71,7 +84,6 @@ def populate(in_file):
 			else:
 				break
 
-
 	#---Convert training data and test data to numpy arrays, remove string category---
 	training_data = np.asarray(source_training_data)
 	test_data = np.asarray(source_test_data)
@@ -79,27 +91,12 @@ def populate(in_file):
 	test_data = np.delete(test_data, 4, 1)
 	training_data = training_data.astype(float)
 	test_data = test_data.astype(float)
-	
-#	if testing: print(training_data)
-#	if testing: print(test_data)
-#	training_data = np.array(source_training_data)
-#	test_data = np.array(source_test_data)
+	#if testing: print(training_data)
+	#if testing: print(test_data)
+	#training_data = np.array(source_training_data)
+	#test_data = np.array(source_test_data)
 
-#-----------------------------------------------------------------
-# Helpers
-#
-
-
-
-#-----------------------------------------------------------------
-# mu derivation
-#
-
-
-
-######################### main #################################
-
-
+################################# main ###################################
 
 if len(sys.argv) != 3:
 	print("Usage: qda_classifier.py dataset.txt out_file")
@@ -113,8 +110,9 @@ except:
 print("Processing training data...")
 populate(f1)
 print("Done")
-
-if testing: print(training_data)
-if testing: print(test_data)
-#if testing: print(source_training_data)
-#if testing: print(source_test_data)
+mu = calculate_mu(training_data)
+print("mu: ", mu)
+#if testing: print("------Training Data-----\n",training_data)
+#if testing: print("------Test Data-----\n", test_data)
+#if testing: print("-----Source Training Data-----\n", source_training_data)
+#if testing: print("-----Source Test Data-----\n", source_test_data)
