@@ -216,11 +216,11 @@ def predict(p1, p2, p3, classification):
 		print("p2: ", p2)
 		print("p3: ", p3)
 
-	print("Prediction: ", prediction)
-	print("Actual: ", classification)
+	#print("Prediction: ", prediction)
+	#print("Actual: ", classification)
 	if prediction == classification:
 		match = True
-		print("Match!")
+		#print("Match!")
 
 	return match
 
@@ -233,17 +233,17 @@ def predict(p1, p2, p3, classification):
 #		- class1_covariance, class2_covariance, and class 3_covariance
 #
 
-def qda_classify():
+def qda_classify(test_set_matrix, test_set_full):
 	matches = 0
 	p1 = 0
 	p2 = 0
 	p3 = 0
 
-	for i, row in enumerate(source_test_data):
+	for i, row in enumerate(test_set_full):
 		#print("QDA Classifying: ", row[0:4])
-		p1 = calculate_probability_qda(class1_mu, class1_covariance, test_data[i])
-		p2 = calculate_probability_qda(class2_mu, class2_covariance, test_data[i])
-		p3 = calculate_probability_qda(class3_mu, class3_covariance, test_data[i])
+		p1 = calculate_probability_qda(class1_mu, class1_covariance, test_set_matrix[i])
+		p2 = calculate_probability_qda(class2_mu, class2_covariance, test_set_matrix[i])
+		p3 = calculate_probability_qda(class3_mu, class3_covariance, test_set_matrix[i])
 
 		if predict(p1, p2, p3, row[4]) == True:
 			matches += 1
@@ -305,16 +305,20 @@ class3_covariance = calculate_covariance(class3_training, class3_mu)
 # print(class2_covariance)
 # print(class3_covariance)
 
-print("QDA Classifying")
-matches = qda_classify()
-print("############ QDA ERROR #############")
-print("QDA Accuracy = ", matches/30)
 
+#-----Begin QDA classification
+print("############## QDA Classifying: Test Data ###############")
+matches = qda_classify(test_data, source_test_data)
+print("---------- QDA ERROR ---------")
+print("QDA Accuracy = ", matches/test_rows)
 
+print("############## QDA Classifying: Training Data ###############")
+matches = qda_classify(training_data, source_training_data)
+print("---------- QDA ERROR ---------")
+print("QDA Accuracy = ", matches/training_rows)
 
-#qda(class1_test)
-#qda(class2_test)
-#qda(class3_test)
+#------Begin LDA Classification
+
 
 
 #if testing: print("------Training Data-----\n",training_data)
@@ -327,22 +331,3 @@ print("QDA Accuracy = ", matches/30)
 #### OLD CODE
 ####
 #############
-        #
-        #
-		# if p1 > p2 and p1 > p3:
-		# 	prediction = "Iris-setosa"
-        #
-		# elif p2 > p1 and p2 > p3:
-		# 	prediction = "Iris-versicolor"
-        #
-		# elif p3 > p1 and p3 > p2:
-		# 	prediction = "Iris-virginica"
-        #
-		# else:	#no specific match
-		# 	print("---No match---")
-		# 	print("p1: ", p1)
-		# 	print("p2: ", p2)
-		# 	print("p3: ", p3)
-        #
-		# print("Prediction: ", prediction)
-		# print("Actual: ", row[4])
