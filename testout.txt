@@ -48,3 +48,355 @@ correct matches =  118
 possible correct =  120
 QDA Error =  0.01666666666666672 
 
+==========================================
+== RETEST ASSUMING INDEPENDENT FEATURES ==
+==========================================
+
+==============================
+LDA Indep. Features: Test Data
+==============================
+correct matches =  30
+possible correct =  30
+LDA Error =  0.0 
+
+==================================
+LDA Indep. Features: Training Data
+==================================
+*** Failed match ***
+Prediction:  Iris-virginica
+Actual:  Iris-versicolor 
+
+*** Failed match ***
+Prediction:  Iris-virginica
+Actual:  Iris-versicolor 
+
+*** Failed match ***
+Prediction:  Iris-versicolor
+Actual:  Iris-virginica 
+
+*** Failed match ***
+Prediction:  Iris-versicolor
+Actual:  Iris-virginica 
+
+*** Failed match ***
+Prediction:  Iris-versicolor
+Actual:  Iris-virginica 
+
+*** Failed match ***
+Prediction:  Iris-versicolor
+Actual:  Iris-virginica 
+
+correct matches =  114
+possible correct =  120
+LDA Error =  0.050000000000000044 
+
+==============================
+QDA Indep. Features: Test Data
+==============================
+correct matches =  30
+possible correct =  30
+QDA Error =  0.0 
+
+==================================
+QDA Indep. Features: Training Data
+==================================
+*** Failed match ***
+Prediction:  Iris-virginica
+Actual:  Iris-versicolor 
+
+*** Failed match ***
+Prediction:  Iris-virginica
+Actual:  Iris-versicolor 
+
+*** Failed match ***
+Prediction:  Iris-versicolor
+Actual:  Iris-virginica 
+
+*** Failed match ***
+Prediction:  Iris-versicolor
+Actual:  Iris-virginica 
+
+*** Failed match ***
+Prediction:  Iris-versicolor
+Actual:  Iris-virginica 
+
+correct matches =  115
+possible correct =  120
+QDA Error =  0.04166666666666663 
+
+==========================
+== TEST FEATURE REMOVAL ==
+==========================
+
+============================
+== Removing Sepal Length  ==
+============================
+
+===================================
+LDA without Sepal Length (Test Data)
+===================================
+correct matches =  30
+possible correct =  30
+LDA Error =  0.0 
+
+=======================================
+LDA without Sepal Length (Training Data)
+=======================================
+*** Failed match ***
+Prediction:  Iris-virginica
+Actual:  Iris-versicolor 
+
+*** Failed match ***
+Prediction:  Iris-versicolor
+Actual:  Iris-virginica 
+
+correct matches =  118
+possible correct =  120
+LDA Error =  0.01666666666666672 
+
+===================================
+QDA without Sepal Length (Test Data)
+===================================
+correct matches =  30
+possible correct =  30
+QDA Error =  0.0 
+
+=======================================
+QDA without Sepal Length (Training Data)
+=======================================
+*** Failed match ***
+Prediction:  Iris-virginica
+Actual:  Iris-versicolor 
+
+*** Failed match ***
+Prediction:  Iris-virginica
+Actual:  Iris-versicolor 
+
+*** Failed match ***
+Prediction:  Iris-versicolor
+Actual:  Iris-virginica 
+
+correct matches =  117
+possible correct =  120
+QDA Error =  0.025000000000000022 
+
+============================
+== Removing Sepal Width  ==
+============================
+
+===================================
+LDA without Sepal Width (Test Data)
+===================================
+correct matches =  30
+possible correct =  30
+LDA Error =  0.0 
+
+=======================================
+LDA without Sepal Width (Training Data)
+=======================================
+*** Failed match ***
+Prediction:  Iris-virginica
+Actual:  Iris-versicolor 
+
+*** Failed match ***
+Prediction:  Iris-virginica
+Actual:  Iris-versicolor 
+
+*** Failed match ***
+Prediction:  Iris-versicolor
+Actual:  Iris-virginica 
+
+correct matches =  117
+possible correct =  120
+LDA Error =  0.025000000000000022 
+
+===================================
+QDA without Sepal Width (Test Data)
+===================================
+correct matches =  30
+possible correct =  30
+QDA Error =  0.0 
+
+=======================================
+QDA without Sepal Width (Training Data)
+=======================================
+*** Failed match ***
+Prediction:  Iris-virginica
+Actual:  Iris-versicolor 
+
+*** Failed match ***
+Prediction:  Iris-virginica
+Actual:  Iris-versicolor 
+
+correct matches =  118
+possible correct =  120
+QDA Error =  0.01666666666666672 
+
+============================
+== Removing Petal Length  ==
+============================
+
+===================================
+LDA without Petal Length (Test Data)
+===================================
+correct matches =  30
+possible correct =  30
+LDA Error =  0.0 
+
+=======================================
+LDA without Petal Length (Training Data)
+=======================================
+*** Failed match ***
+Prediction:  Iris-virginica
+Actual:  Iris-versicolor 
+
+*** Failed match ***
+Prediction:  Iris-virginica
+Actual:  Iris-versicolor 
+
+*** Failed match ***
+Prediction:  Iris-virginica
+Actual:  Iris-versicolor 
+
+*** Failed match ***
+Prediction:  Iris-versicolor
+Actual:  Iris-virginica 
+
+*** Failed match ***
+Prediction:  Iris-versicolor
+Actual:  Iris-virginica 
+
+*** Failed match ***
+Prediction:  Iris-versicolor
+Actual:  Iris-virginica 
+
+*** Failed match ***
+Prediction:  Iris-versicolor
+Actual:  Iris-virginica 
+
+correct matches =  113
+possible correct =  120
+LDA Error =  0.05833333333333335 
+
+===================================
+QDA without Petal Length (Test Data)
+===================================
+correct matches =  30
+possible correct =  30
+QDA Error =  0.0 
+
+=======================================
+QDA without Petal Length (Training Data)
+=======================================
+*** Failed match ***
+Prediction:  Iris-virginica
+Actual:  Iris-versicolor 
+
+*** Failed match ***
+Prediction:  Iris-virginica
+Actual:  Iris-versicolor 
+
+*** Failed match ***
+Prediction:  Iris-virginica
+Actual:  Iris-versicolor 
+
+*** Failed match ***
+Prediction:  Iris-versicolor
+Actual:  Iris-virginica 
+
+*** Failed match ***
+Prediction:  Iris-versicolor
+Actual:  Iris-virginica 
+
+correct matches =  115
+possible correct =  120
+QDA Error =  0.04166666666666663 
+
+============================
+== Removing Petal Width  ==
+============================
+
+===================================
+LDA without Petal Width (Test Data)
+===================================
+*** Failed match ***
+Prediction:  Iris-versicolor
+Actual:  Iris-virginica 
+
+correct matches =  29
+possible correct =  30
+LDA Error =  0.033333333333333326 
+
+=======================================
+LDA without Petal Width (Training Data)
+=======================================
+*** Failed match ***
+Prediction:  Iris-virginica
+Actual:  Iris-versicolor 
+
+*** Failed match ***
+Prediction:  Iris-virginica
+Actual:  Iris-versicolor 
+
+*** Failed match ***
+Prediction:  Iris-versicolor
+Actual:  Iris-virginica 
+
+*** Failed match ***
+Prediction:  Iris-versicolor
+Actual:  Iris-virginica 
+
+*** Failed match ***
+Prediction:  Iris-versicolor
+Actual:  Iris-virginica 
+
+correct matches =  115
+possible correct =  120
+LDA Error =  0.04166666666666663 
+
+===================================
+QDA without Petal Width (Test Data)
+===================================
+*** Failed match ***
+Prediction:  Iris-versicolor
+Actual:  Iris-virginica 
+
+correct matches =  29
+possible correct =  30
+QDA Error =  0.033333333333333326 
+
+=======================================
+QDA without Petal Width (Training Data)
+=======================================
+*** Failed match ***
+Prediction:  Iris-virginica
+Actual:  Iris-versicolor 
+
+*** Failed match ***
+Prediction:  Iris-virginica
+Actual:  Iris-versicolor 
+
+*** Failed match ***
+Prediction:  Iris-virginica
+Actual:  Iris-versicolor 
+
+*** Failed match ***
+Prediction:  Iris-versicolor
+Actual:  Iris-virginica 
+
+*** Failed match ***
+Prediction:  Iris-versicolor
+Actual:  Iris-virginica 
+
+*** Failed match ***
+Prediction:  Iris-versicolor
+Actual:  Iris-virginica 
+
+*** Failed match ***
+Prediction:  Iris-versicolor
+Actual:  Iris-virginica 
+
+correct matches =  113
+possible correct =  120
+QDA Error =  0.05833333333333335 
+

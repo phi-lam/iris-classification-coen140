@@ -68,12 +68,12 @@ def calculate_covariance(training_class, mu_vector):
 	for index, row in enumerate(training_class):
 		temp = row - mu_vector
 		covariance += np.outer(temp, temp)
-		#incorrect? #covariance += np.outer(temp, np.transpose(temp))
-		#if testing_covariance: print("covariance row: ", row)
-		#if testing_covariance: print("covariance iteration: ", covariance)
-#	if testing_covariance: print("covariance: ", covariance) #debugging
 	covariance = (1/class_rows) * covariance				#1/N
 	return covariance
+	#incorrect? #covariance += np.outer(temp, np.transpose(temp))
+	#if testing_covariance: print("covariance row: ", row)
+	#if testing_covariance: print("covariance iteration: ", covariance)
+	#	if testing_covariance: print("covariance: ", covariance) #debugging
 
 #-----------------------------------------------------------------
 # FUNCTION: calculate_mu()
@@ -254,7 +254,7 @@ def lda_classify(test_set_matrix, test_set_list):
 		p2 = calculate_probability(class2_mu, mean_covariance, test_set_matrix[i])
 		p3 = calculate_probability(class3_mu, mean_covariance, test_set_matrix[i])
 
-		if predict(p1, p2, p3, row[4]) == True:
+		if predict(p1, p2, p3, row[-1]) == True:		#row[-1] is the class
 			matches += 1
 
 	print("correct matches = ", matches)
@@ -281,13 +281,12 @@ def qda_classify(test_set_matrix, test_set_list):
 		p2 = calculate_probability(class2_mu, class2_covariance, test_set_matrix[i])
 		p3 = calculate_probability(class3_mu, class3_covariance, test_set_matrix[i])
 
-		if predict(p1, p2, p3, row[4]) == True:
+		if predict(p1, p2, p3, row[-1]) == True:
 			matches += 1
 
 	print("correct matches = ", matches)
 	print("possible correct = ", i+1)
 	return matches
-
 
 ################################# main ###################################
 
@@ -334,14 +333,12 @@ print("==========================")
 print("LDA Classifying: Test Data")
 print("==========================")
 matches = lda_classify(test_data, source_test_data)
-#print("---------- LDA ERROR ---------")
 print("LDA Error = ", 1 - matches/test_rows, "\n")
 
 print("==============================")
 print("LDA Classifying: Training Data")
 print("==============================")
 matches = lda_classify(training_data, source_training_data)
-#print("---------- LDA ERROR ---------")
 print("LDA Error = ", 1 - matches/training_rows, "\n")
 
 #-----Begin QDA classification
@@ -349,69 +346,134 @@ print("==========================")
 print("QDA Classifying: Test Data")
 print("==========================")
 matches = qda_classify(test_data, source_test_data)
-#print("---------- QDA ERROR ---------")
 print("QDA Error = ", 1 - matches/test_rows, "\n")
 
 print("==============================")
 print("QDA Classifying: Training Data")
 print("==============================")
 matches = qda_classify(training_data, source_training_data)
-#print("---------- QDA ERROR ---------")
 print("QDA Error = ", 1 - matches/training_rows, "\n")
 
-#------Test feature removal
-
+#####################################################
 #------Assume independent features, run test again
-print("====================================")
-print("RETEST ASSUMING INDEPENDENT FEATURES")
-print("====================================")
+#######################################################
+print("==========================================")
+print("== RETEST ASSUMING INDEPENDENT FEATURES ==")
+print("==========================================\n")
+#----Convert to diagnoal matrices
 class1_covariance = diag_covariance(class1_covariance)
 class2_covariance = diag_covariance(class2_covariance)
 class3_covariance = diag_covariance(class3_covariance)
 
 #------Begin LDA Classification
-print("==========================")
-print("LDA Classifying: Test Data")
-print("==========================")
+print("==============================")
+print("LDA Indep. Features: Test Data")
+print("==============================")
 matches = lda_classify(test_data, source_test_data)
-#print("---------- LDA ERROR ---------")
 print("LDA Error = ", 1 - matches/test_rows, "\n")
 
-print("==============================")
-print("LDA Classifying: Training Data")
-print("==============================")
+print("==================================")
+print("LDA Indep. Features: Training Data")
+print("==================================")
 matches = lda_classify(training_data, source_training_data)
-#print("---------- LDA ERROR ---------")
 print("LDA Error = ", 1 - matches/training_rows, "\n")
 
 #-----Begin QDA classification
-print("==========================")
-print("QDA Classifying: Test Data")
-print("==========================")
+print("==============================")
+print("QDA Indep. Features: Test Data")
+print("==============================")
 matches = qda_classify(test_data, source_test_data)
-#print("---------- QDA ERROR ---------")
 print("QDA Error = ", 1 - matches/test_rows, "\n")
 
-print("==============================")
-print("QDA Classifying: Training Data")
-print("==============================")
+print("==================================")
+print("QDA Indep. Features: Training Data")
+print("==================================")
 matches = qda_classify(training_data, source_training_data)
-#print("---------- QDA ERROR ---------")
 print("QDA Error = ", 1 - matches/training_rows, "\n")
 
+###################################
+##------Test feature removal
+###################################
+print("==========================")
+print("== TEST FEATURE REMOVAL ==")
+print("==========================\n")
+feature_list = ["Sepal Length", "Sepal Width", "Petal Length", "Petal Width"]
+
+# Phi: This is a horribly inefficient loop with multiple redundant
+# recalculations, but I'm not graded on efficiency and the deadline is
+# coming up. I didn't plan to able to accomodate this test ¯\_(ツ)_/¯
+
+for i in range(4):
+	print("============================")
+	print("== Removing", feature_list[i], " ==")
+	print("============================\n")
+
+	#----Reset mu and covariance
+	class1_mu = calculate_mu(class1_training)
+	class2_mu = calculate_mu(class2_training)
+	class3_mu = calculate_mu(class3_training)
+	class1_covariance = calculate_covariance(class1_training, class1_mu)
+	class2_covariance = calculate_covariance(class2_training, class2_mu)
+	class3_covariance = calculate_covariance(class3_training, class3_mu)
+
+	#-----Mu: delete i'th column
+	class1_mu = np.delete(class1_mu, i)
+	class2_mu = np.delete(class2_mu, i)
+	class3_mu = np.delete(class3_mu, i)
+
+	#-----Covariance: delete i'th row and column
+	#	TODO: make functions take covariance as a parameter, remove
+	# 			global covariance. That way, covariance doesn't have
+	#			to be continuously calculated.
+	#
+	#		Alternatively, leverage calculate_covariance() with the reduced
+	#		training data and mu as parameters, but have to fix the first
+	#		hardcoded line in that function. I still have to write the report
+	#		leave me alone.
+
+	class1_covariance = np.delete(class1_covariance, i, 1)
+	class2_covariance = np.delete(class2_covariance, i, 1)
+	class3_covariance = np.delete(class3_covariance, i, 1)
+	class1_covariance = np.delete(class1_covariance, i, 0)
+	class2_covariance = np.delete(class2_covariance, i, 0)
+	class3_covariance = np.delete(class3_covariance, i, 0)
+
+	#------Best effort to avoid complications with global variables,
+	#			delete i'th column in training and test data
+	#print(test_data)
+	# had to make sure that the training and test data weren't corrupted by
+	# this horrible code
+	test_sample = np.delete(test_data, i, 1)
+	#print(test_data)
+	source_test_sample = np.delete(source_test_data, i, 1)
+	training_sample = np.delete(training_data, i, 1)
+	source_training_sample = np.delete(source_training_data, i, 1)
+
+	#------LDA Classification
+	print("===================================")
+	print("LDA without", feature_list[i], "(Test Data)")
+	print("===================================")
+	matches = lda_classify(test_sample, source_test_sample)
+	print("LDA Error = ", 1 - matches/test_rows, "\n")
+
+	print("=======================================")
+	print("LDA without", feature_list[i], "(Training Data)")
+	print("=======================================")
+	matches = lda_classify(training_sample, source_training_sample)
+	print("LDA Error = ", 1 - matches/training_rows, "\n")
+
+	#-----Begin QDA classification
+	print("===================================")
+	print("QDA without", feature_list[i], "(Test Data)")
+	print("===================================")
+	matches = qda_classify(test_sample, source_test_sample)
+	print("QDA Error = ", 1 - matches/test_rows, "\n")
+
+	print("=======================================")
+	print("QDA without", feature_list[i], "(Training Data)")
+	print("=======================================")
+	matches = qda_classify(training_sample, source_training_sample)
+	print("QDA Error = ", 1 - matches/training_rows, "\n")
 
 
-
-
-
-
-#if testing: print("------Training Data-----\n",training_data)
-#if testing: print("------Test Data-----\n", test_data)
-#if testing: print("-----Source Training Data-----\n", source_training_data)
-#if testing: print("-----Source Test Data-----\n", source_test_data)
-
-#############
-####
-#### OLD CODE
-####
-#############
+#end
