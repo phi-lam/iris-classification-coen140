@@ -72,7 +72,6 @@ def calculate_covariance(training_class, mu_vector):
 		#if testing_covariance: print("covariance row: ", row)
 		#if testing_covariance: print("covariance iteration: ", covariance)
 #	if testing_covariance: print("covariance: ", covariance) #debugging
-
 	covariance = (1/class_rows) * covariance				#1/N
 	return covariance
 
@@ -89,19 +88,12 @@ def calculate_mu(np_array):
 	return mu_vector
 
 #------------------------------------------------------------------
-# FUNCTION: calculate_probability_lda()
+# FUNCTION: calculate_probability()
 #
 #	x and mu are vectors
+#	If called by lda_classify(), will receive the mean covariance
 #
-def calculate_probability_lda(mu, covariance, x):
-	return
-
-#------------------------------------------------------------------
-# FUNCTION: calculate_probability_qda()
-#
-#	x and mu are vectors
-#
-def calculate_probability_qda(mu, covariance, x):
+def calculate_probability(mu, covariance, x):
 	if testing_calculate_qda: print("Inside calculate_probability_qda: covariance = ")
 	if testing_calculate_qda: print(covariance)
 	if testing_calculate_qda: print("x = ", x)
@@ -121,10 +113,22 @@ def calculate_probability_qda(mu, covariance, x):
 
 	term2 = math.exp(term_exp3)
 
-	qda_probability = (1/term1) * term2
-	qda_probability = qda_probability * 1/3		#prior probability p(c)
+	probability = (1/term1) * term2
+	probability = probability * 1/3		#prior probability p(c)
 
-	return qda_probability
+	return probability
+
+#------------------------------------------------------------------
+# FUNCTION: diag_covariance(covariance_matrix)
+#
+#	Description: Convert a given covariance matrix into a diagonal
+#				 matrix.
+def diag_covariance(covariance_matrix):
+	diag = np.zeros((4,4))
+	for i in range(covariance_matrix.shape[0]):
+		diag[i, i] = covariance_matrix[i, i]
+	return diag
+
 #-----------------------------------------------------------------
 # FUNCTION: populate()
 #   Input: dataset.txt
@@ -216,39 +220,15 @@ def predict(p1, p2, p3, classification):
 		print("p2: ", p2)
 		print("p3: ", p3)
 
-	#print("Prediction: ", prediction)
-	#print("Actual: ", classification)
 	if prediction == classification:
 		match = True
 		#print("Match!")
+	else:
+		print("*** Failed match ***")
+		print("Prediction: ", prediction)
+		print("Actual: ", classification, "\n")
 
 	return match
-
-#-----------------------------------------------------------------
-# FUNCTION: qda_classify()
-#
-#	Description: depends on multiple global variables:
-#		- source_test_data
-#		- class1_mu, class2_mu, and class3_mu
-#		- class1_covariance, class2_covariance, and class 3_covariance
-#
-
-def qda_classify(test_set_matrix, test_set_full):
-	matches = 0
-	p1 = 0
-	p2 = 0
-	p3 = 0
-
-	for i, row in enumerate(test_set_full):
-		#print("QDA Classifying: ", row[0:4])
-		p1 = calculate_probability_qda(class1_mu, class1_covariance, test_set_matrix[i])
-		p2 = calculate_probability_qda(class2_mu, class2_covariance, test_set_matrix[i])
-		p3 = calculate_probability_qda(class3_mu, class3_covariance, test_set_matrix[i])
-
-		if predict(p1, p2, p3, row[4]) == True:
-			matches += 1
-	print("matches = ", matches)
-	return matches
 
 #-----------------------------------------------------------------
 # FUNCTION: lda_classify()
@@ -258,37 +238,81 @@ def qda_classify(test_set_matrix, test_set_full):
 #		- class1_mu, class2_mu, and class3_mu
 #		- class1_covariance, class2_covariance, and class 3_covariance
 #
-def lda_classify():
+def lda_classify(test_set_matrix, test_set_list):
 	matches = 0
 	p1 = 0
 	p2 = 0
 	p3 = 0
 
-	for row in source_test_data:
-		print("LDA Classifying: ", row)
-		p1 = calculate_probability_lda(class1_mu, class1_covariance, row)
-		p2 = calculate_probability_lda(class2_mu, class2_covariance, row)
-		p3 = calculate_probability_lda(class3_mu, class3_covariance, row)
+	#-----Calculate average covariance, used for calculating all probalities.
+	premean_sum = class1_covariance + class2_covariance + class3_covariance
+	mean_covariance = np.divide(premean_sum, 3)
+
+	for i, row in enumerate(test_set_list):
+		#print("LDA Classifying: ", row[0:4])
+		p1 = calculate_probability(class1_mu, mean_covariance, test_set_matrix[i])
+		p2 = calculate_probability(class2_mu, mean_covariance, test_set_matrix[i])
+		p3 = calculate_probability(class3_mu, mean_covariance, test_set_matrix[i])
 
 		if predict(p1, p2, p3, row[4]) == True:
 			matches += 1
+
+	print("correct matches = ", matches)
+	print("possible correct = ", i+1)
 	return matches
+
+#-----------------------------------------------------------------
+# FUNCTION: qda_classify()
+#
+#	Description: depends on multiple global variables:
+#		- source_test_data
+#		- class1_mu, class2_mu, and class3_mu
+#		- class1_covariance, class2_covariance, and class 3_covariance
+#
+def qda_classify(test_set_matrix, test_set_list):
+	matches = 0
+	p1 = 0
+	p2 = 0
+	p3 = 0
+
+	for i, row in enumerate(test_set_list):
+		#print("QDA Classifying: ", row[0:4])
+		p1 = calculate_probability(class1_mu, class1_covariance, test_set_matrix[i])
+		p2 = calculate_probability(class2_mu, class2_covariance, test_set_matrix[i])
+		p3 = calculate_probability(class3_mu, class3_covariance, test_set_matrix[i])
+
+		if predict(p1, p2, p3, row[4]) == True:
+			matches += 1
+
+	print("correct matches = ", matches)
+	print("possible correct = ", i+1)
+	return matches
+
 
 ################################# main ###################################
 
-if len(sys.argv) != 3:
-	print("Usage: qda_classifier.py dataset.txt out_file")
-try:
-	f1 = open(sys.argv[1])
-	f2 = open(sys.argv[2], "w")
-except:
-	print("Usage: arguments must be text files")
+if len(sys.argv) == 2:
+	try:
+		f1 = open(sys.argv[1])
+	except:
+		print("Usage: arguments must be text files")
+		exit()
+elif len(sys.argv) == 3:
+	try:
+		f1 = open(sys.argv[1])
+		sys.stdout = open(sys.argv[2], "w")
+	except:
+		print("Usage: arguments must be text files")
+		exit()
+else:
+	print("Usage: iris_classifier.py dataset.txt out_file.txt")
+	print("Note: if no output file, will print to stdout")
 	exit()
 
 #----Take input data-----
-print("Processing training data...")
+print("--- Processing training data ---")
 populate(f1)
-print("Done")
+print("--- Done ---")
 
 #----Determine parameters mu and covariance
 class1_mu = calculate_mu(class1_training)
@@ -305,19 +329,79 @@ class3_covariance = calculate_covariance(class3_training, class3_mu)
 # print(class2_covariance)
 # print(class3_covariance)
 
+#------Begin LDA Classification
+print("==========================")
+print("LDA Classifying: Test Data")
+print("==========================")
+matches = lda_classify(test_data, source_test_data)
+#print("---------- LDA ERROR ---------")
+print("LDA Error = ", 1 - matches/test_rows, "\n")
+
+print("==============================")
+print("LDA Classifying: Training Data")
+print("==============================")
+matches = lda_classify(training_data, source_training_data)
+#print("---------- LDA ERROR ---------")
+print("LDA Error = ", 1 - matches/training_rows, "\n")
 
 #-----Begin QDA classification
-print("############## QDA Classifying: Test Data ###############")
+print("==========================")
+print("QDA Classifying: Test Data")
+print("==========================")
 matches = qda_classify(test_data, source_test_data)
-print("---------- QDA ERROR ---------")
-print("QDA Accuracy = ", matches/test_rows)
+#print("---------- QDA ERROR ---------")
+print("QDA Error = ", 1 - matches/test_rows, "\n")
 
-print("############## QDA Classifying: Training Data ###############")
+print("==============================")
+print("QDA Classifying: Training Data")
+print("==============================")
 matches = qda_classify(training_data, source_training_data)
-print("---------- QDA ERROR ---------")
-print("QDA Accuracy = ", matches/training_rows)
+#print("---------- QDA ERROR ---------")
+print("QDA Error = ", 1 - matches/training_rows, "\n")
+
+#------Test feature removal
+
+#------Assume independent features, run test again
+print("====================================")
+print("RETEST ASSUMING INDEPENDENT FEATURES")
+print("====================================")
+class1_covariance = diag_covariance(class1_covariance)
+class2_covariance = diag_covariance(class2_covariance)
+class3_covariance = diag_covariance(class3_covariance)
 
 #------Begin LDA Classification
+print("==========================")
+print("LDA Classifying: Test Data")
+print("==========================")
+matches = lda_classify(test_data, source_test_data)
+#print("---------- LDA ERROR ---------")
+print("LDA Error = ", 1 - matches/test_rows, "\n")
+
+print("==============================")
+print("LDA Classifying: Training Data")
+print("==============================")
+matches = lda_classify(training_data, source_training_data)
+#print("---------- LDA ERROR ---------")
+print("LDA Error = ", 1 - matches/training_rows, "\n")
+
+#-----Begin QDA classification
+print("==========================")
+print("QDA Classifying: Test Data")
+print("==========================")
+matches = qda_classify(test_data, source_test_data)
+#print("---------- QDA ERROR ---------")
+print("QDA Error = ", 1 - matches/test_rows, "\n")
+
+print("==============================")
+print("QDA Classifying: Training Data")
+print("==============================")
+matches = qda_classify(training_data, source_training_data)
+#print("---------- QDA ERROR ---------")
+print("QDA Error = ", 1 - matches/training_rows, "\n")
+
+
+
+
 
 
 

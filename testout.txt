@@ -1,0 +1,50 @@
+--- Processing training data ---
+--- Done ---
+==========================
+LDA Classifying: Test Data
+==========================
+correct matches =  30
+possible correct =  30
+LDA Error =  0.0 
+
+==============================
+LDA Classifying: Training Data
+==============================
+*** Failed match ***
+Prediction:  Iris-virginica
+Actual:  Iris-versicolor 
+
+*** Failed match ***
+Prediction:  Iris-virginica
+Actual:  Iris-versicolor 
+
+*** Failed match ***
+Prediction:  Iris-versicolor
+Actual:  Iris-virginica 
+
+correct matches =  117
+possible correct =  120
+LDA Error =  0.025000000000000022 
+
+==========================
+QDA Classifying: Test Data
+==========================
+correct matches =  30
+possible correct =  30
+QDA Error =  0.0 
+
+==============================
+QDA Classifying: Training Data
+==============================
+*** Failed match ***
+Prediction:  Iris-virginica
+Actual:  Iris-versicolor 
+
+*** Failed match ***
+Prediction:  Iris-virginica
+Actual:  Iris-versicolor 
+
+correct matches =  118
+possible correct =  120
+QDA Error =  0.01666666666666672 
+
